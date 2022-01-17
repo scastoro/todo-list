@@ -1,4 +1,4 @@
-const expandedTodo = (obj, event) => {
+export const expandedTodo = (obj, event) => {
 
   // const currentDiv = event.target
   const expandedContainer = document.createElement('div');
@@ -50,10 +50,10 @@ const expandedTodo = (obj, event) => {
   expandedContainer.appendChild(attrList);
   expandedContainer.appendChild(buttonContainer);
 
-  document.body.appendChild(expandedContainer);
+  document.body.firstElementChild.appendChild(expandedContainer);
 }
 
-const testObj = {
+export const testObj = {
   description: 'This is a test Description',
   priority: 1,
   notes: 'Here are some notes',

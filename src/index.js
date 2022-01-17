@@ -1,4 +1,5 @@
 import css from './style.css';
+import {expandedTodo, testObj} from './expandedTodo';
 
 console.log('Hello there!')
 
@@ -8,4 +9,4 @@ let header = document.createElement('h1');
 
 header.appendChild(str);
 
-document.body.firstElementChild.appendChild(header);
+expandedTodo(testObj);
