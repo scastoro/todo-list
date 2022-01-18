@@ -49,9 +49,10 @@ const renderProjectView = (project) => {
   const todoList = document.createElement('ul');
   todoList.classList.toggle('todo-list');
 
-  project.todos.forEach(todo => {
+  project.todos.forEach((todo, index) => {
     const todoItem = document.createElement('li');
     todoItem.classList.toggle('todo-li');
+    todoItem.setAttribute('data-todo-index', index);
 
     const todoDiv = document.createElement('div');
     todoDiv.classList.toggle('todo-div');
@@ -101,3 +102,5 @@ const projectTestObj = {
     },
   ]
 }
+
+export {renderProjectView, projectTestObj};
