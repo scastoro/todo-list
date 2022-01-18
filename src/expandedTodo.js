@@ -1,5 +1,9 @@
 export const expandedTodo = (obj, event) => {
 
+  // Check event.target.getAttribute('data-todo-index') to get index of current todo
+  // Pass this info into a pub sub subscribe call
+  // This call should return the object at that index from the main todo module
+
   // const currentDiv = event.target
   const expandedContainer = document.createElement('div');
   expandedContainer.classList.toggle('todo-list-expanded');

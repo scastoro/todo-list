@@ -49,6 +49,8 @@ const renderProjectView = (project) => {
   const todoList = document.createElement('ul');
   todoList.classList.toggle('todo-list');
 
+  // Probably need to add a data-attr for project
+  // Allows for accessing project object key when selecting li
   project.todos.forEach((todo, index) => {
     const todoItem = document.createElement('li');
     todoItem.classList.toggle('todo-li');
