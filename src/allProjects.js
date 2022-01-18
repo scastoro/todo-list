@@ -56,3 +56,5 @@ const allProjectsTestObj = [
     name: 'Test Project Name'
   },
 ]
+
+export {renderAllProjectsView, allProjectsTestObj};
