@@ -12,7 +12,7 @@ const renderProjectView = (project) => {
 
   const projectHeader = document.createElement('h1');
   projectHeader.classList.toggle('project-header');
-  projectHeader.appendChild(document.createTextNode(`${project.title}`));
+  projectHeader.appendChild(document.createTextNode(`${project.name}`));
 
   headerDivLeft.appendChild(projectHeader);
 
@@ -55,6 +55,7 @@ const renderProjectView = (project) => {
     const todoItem = document.createElement('li');
     todoItem.classList.toggle('todo-li');
     todoItem.setAttribute('data-todo-index', index);
+    todoItem.setAttribute('data-project-name', project.name);
 
     const todoDiv = document.createElement('div');
     todoDiv.classList.toggle('todo-div');
@@ -88,7 +89,7 @@ const renderProjectView = (project) => {
 }
 
 const projectTestObj = {
-  title: 'Project Test',
+  name: 'Default',
   todos: [
     {
       name: 'Buy Groceries',

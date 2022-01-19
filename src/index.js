@@ -3,6 +3,7 @@ import {expandedTodo, testObj} from './expandedTodo';
 import {renderProjectView, projectTestObj} from './project';
 import {renderAllProjectsView, allProjectsTestObj} from './allProjects';
 import {displayController} from './displayController';
+import {todoApp} from './todoApp';
 
 console.log('Hello there!')
 
@@ -19,3 +20,5 @@ renderProjectView(projectTestObj);
 renderAllProjectsView(allProjectsTestObj);
 
 displayController();
+
+todoApp();
