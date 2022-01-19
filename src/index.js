@@ -1,6 +1,6 @@
 import css from './style.css';
 import {expandedTodo, testObj} from './expandedTodo';
-import {renderProjectView, projectTestObj} from './project';
+import {renderProjectView, projectTestObj} from './projectView';
 import {renderAllProjectsView, allProjectsTestObj} from './allProjects';
 import {displayController} from './displayController';
 import {todoApp} from './todoApp';
