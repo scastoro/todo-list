@@ -1,3 +1,5 @@
+import PubSub from "pubsub-js";
+
 const renderAllProjectsView = (projects) => {
   const contentDiv = document.querySelector('#content');
 
@@ -44,6 +46,11 @@ const renderAllProjectsView = (projects) => {
   allProjectsContainer.appendChild(projectsDivContainer);
   contentDiv.appendChild(allProjectsContainer);
 }
+
+// Receive projects array from todoApp publish and generate all projects view
+PubSub.subscribe('all projects returned', function(msg, data){
+  renderAllProjectsView(data);
+})
 
 const allProjectsTestObj = [
   {

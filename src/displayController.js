@@ -19,10 +19,12 @@ const displayController = () => {
 
     todoListItem.forEach(item => {
       item.addEventListener('click', function (event) {
-        event.stopImmediatePropagation();
-        PubSub.publish('todo clicked', event.currentTarget);
+        const todoInfo = {};
+        todoInfo.index = event.currentTarget.getAttribute('data-todo-index');
+        todoInfo.name = event.currentTarget.getAttribute('data-project-name');
+        PubSub.publish('todo clicked', todoInfo);
       });
-    }, true);
+    });
 
     todoDeleteBtn.forEach(item => {
       item.addEventListener('click', function (event) {
