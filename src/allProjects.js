@@ -22,8 +22,14 @@ const renderAllProjectsView = (projects) => {
   newProjectBtn.id = 'new-project-btn';
   newProjectBtn.classList.toggle('btn');
   newProjectBtn.type = 'button';
-  newProjectBtn.appendChild(document.createTextNode('New Project'));
+  newProjectBtn.appendChild(document.createTextNode('Add Project'));
 
+  const newProjectInput = document.createElement('input');
+  newProjectInput.id = 'project-name-input';
+  newProjectInput.type = 'text';
+  newProjectInput.placeholder = 'Project Name';
+  
+  newProjectDiv.appendChild(newProjectInput);
   newProjectDiv.appendChild(newProjectBtn);
   projectsHeaderDiv.appendChild(newProjectDiv)
 
@@ -50,7 +56,12 @@ const renderAllProjectsView = (projects) => {
 // Receive projects array from todoApp publish and generate all projects view
 PubSub.subscribe('all projects returned', function(msg, data){
   renderAllProjectsView(data);
-})
+});
+// Re-render projects when new project is added to the todoApp projects array
+PubSub.subscribe('new project added', function(msg, data){
+  renderAllProjectsView(data);
+  PubSub.publish('all projects rendered')
+});
 
 const allProjectsTestObj = [
   {

@@ -1,6 +1,14 @@
 import PubSub from "pubsub-js";
 
 const displayController = () => {
+  // Helper function to clear current page view and allow for new view to be appended to content div
+  const clearView = () => {
+    const contentDiv = document.querySelector('#content');
+    while(contentDiv.firstChild) {
+      contentDiv.removeChild(contentDiv.firstChild);
+    }
+  }
+
   // Create event listeners for specific views
   // Project View
   const createProjectListeners = () => {
@@ -35,10 +43,14 @@ const displayController = () => {
   // All projects view
   const createAllProjectsListeners = () => {
     const newProjectBtn = document.querySelector('#new-project-btn');
+    const inputValue = document.querySelector('#project-name-input');
 
     newProjectBtn.addEventListener('click', function (event) {
-      PubSub.publish('new project button clicked', event);
-    })
+      event.preventDefault();
+      PubSub.publish('new project button clicked', inputValue.value);
+      inputValue.value = '';
+      clearView();
+    });
   }
 
   function printData(data) {
@@ -46,9 +58,14 @@ const displayController = () => {
   }
   PubSub.subscribe('todo clicked', function (msg, data) {
     printData(data);
-  })
+  });
+
+  PubSub.subscribe('all projects rendered', function(msg, data){
+    createAllProjectsListeners();
+  });
 
   createProjectListeners();
+  createAllProjectsListeners();
 }
 
 export { displayController };
