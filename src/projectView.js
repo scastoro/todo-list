@@ -13,6 +13,7 @@ const renderProjectView = (project) => {
   const projectHeader = document.createElement('h1');
   projectHeader.classList.toggle('project-header');
   projectHeader.appendChild(document.createTextNode(`${project.name}`));
+  // Maybe add a Project name data attr somewhere so the new todos can access the value and pass it to the todoApp.js module
 
   headerDivLeft.appendChild(projectHeader);
 
