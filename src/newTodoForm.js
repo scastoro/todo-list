@@ -1,7 +1,7 @@
 import PubSub from "pubsub-js";
 
 // Form to be rendered when todo button is clicked
-const renderTodoForm = () => {
+export const renderTodoForm = () => {
   const formContainer = document.createElement('div');
   formContainer.classList.toggle('new-todo-form-container');
 
@@ -20,7 +20,7 @@ const renderTodoForm = () => {
   const nameInput = document.createElement('input');
   nameInput.id = 'todo-name';
   nameInput.type = 'text';
-  nameInput.placeholder = 'todo name';
+  nameInput.placeholder = 'Name';
   nameInput.name = 'todo-name';
 
   todoForm.appendChild(nameInput);
@@ -28,7 +28,7 @@ const renderTodoForm = () => {
   const descriptionInput = document.createElement('input');
   descriptionInput.id = 'todo-description';
   descriptionInput.type = 'text';
-  descriptionInput.placeholder = 'todo description';
+  descriptionInput.placeholder = 'Description';
   descriptionInput.description = 'todo-description';
 
   todoForm.appendChild(descriptionInput);
@@ -36,7 +36,7 @@ const renderTodoForm = () => {
   const dueDateInput = document.createElement('input');
   dueDateInput.id = 'todo-dueDate';
   dueDateInput.type = 'text';
-  dueDateInput.placeholder = 'todo dueDate';
+  dueDateInput.placeholder = 'Due date';
   dueDateInput.dueDate = 'todo-dueDate';
 
   todoForm.appendChild(dueDateInput);
@@ -44,7 +44,7 @@ const renderTodoForm = () => {
   const priorityInput = document.createElement('input');
   priorityInput.id = 'todo-priority';
   priorityInput.type = 'text';
-  priorityInput.placeholder = 'todo priority';
+  priorityInput.placeholder = 'priority';
   priorityInput.priority = 'todo-priority';
 
   todoForm.appendChild(priorityInput);
@@ -58,6 +58,7 @@ const renderTodoForm = () => {
   completeYesInput.id = 'todo-complete-yes';
   completeYesInput.type = 'radio';
   completeYesInput.value = 'Yes';
+  completeYesInput.name = 'todo-complete';
 
   todoForm.appendChild(completeYesInput);
 
@@ -71,6 +72,7 @@ const renderTodoForm = () => {
   completeNoInput.id = 'todo-complete-no';
   completeNoInput.type = 'radio';
   completeNoInput.value = 'No';
+  completeNoInput.name = 'todo-complete';
 
   todoForm.appendChild(completeNoInput);
 
@@ -83,7 +85,7 @@ const renderTodoForm = () => {
   const todoSubmitBtn = document.createElement('input');
   todoSubmitBtn.type = 'button';
   todoSubmitBtn.value = 'Add todo';
-  todoSubmitBtn.id ='todo-submit-btn';
+  todoSubmitBtn.id ='new-todo-submit-btn';
 
   todoForm.appendChild(todoSubmitBtn);
 
@@ -91,4 +93,11 @@ const renderTodoForm = () => {
   formDiv.appendChild(todoForm);
   formContainer.appendChild(formDiv);
   document.body.appendChild(formContainer);
+
+  PubSub.publish('new todo form rendered')
 }
+
+// Subscribe to when add todo button is clicked
+PubSub.subscribe('add todo button clicked', function(msg, data){
+  renderTodoForm();
+})

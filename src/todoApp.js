@@ -158,6 +158,11 @@ export const todoApp = () => {
     console.log('all projects returned');
     PubSub.publish('all projects returned', getAllProjects())
   });
+  // Add new todo
+  PubSub.subscribe('new todo submitted', function(msg, data){
+    addTodo(data);
+    PubSub.publish('new todo added', getAllTodos());
+  })
   // Return todo when clicked
   PubSub.subscribe('todo clicked', function(msg, data){
     console.log('todo returned');

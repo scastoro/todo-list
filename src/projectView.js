@@ -1,3 +1,5 @@
+import PubSub from "pubsub-js";
+
 const renderProjectView = (project) => {
   const contentDiv = document.querySelector('#content');
 
@@ -14,6 +16,7 @@ const renderProjectView = (project) => {
   projectHeader.classList.toggle('project-header');
   projectHeader.appendChild(document.createTextNode(`${project.name}`));
   // Maybe add a Project name data attr somewhere so the new todos can access the value and pass it to the todoApp.js module
+  projectHeader.setAttribute('data-project-name', project.name);
 
   headerDivLeft.appendChild(projectHeader);
 
@@ -106,5 +109,9 @@ const projectTestObj = {
     },
   ]
 }
+// Render page when new todo added
+PubSub.subscribe('new todo added', function(msg, data){
+  renderProjectView(data);
+})
 
 export {renderProjectView, projectTestObj};
