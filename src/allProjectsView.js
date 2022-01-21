@@ -1,9 +1,10 @@
 import PubSub from "pubsub-js";
-import { renderProjectView } from "./projectView";
 
 const renderAllProjectsView = (projects) => {
   const contentDiv = document.querySelector('#content');
-
+  while(contentDiv.firstChild) {
+    contentDiv.removeChild(contentDiv.firstChild);
+  }
   const allProjectsContainer = document.createElement('div');
   allProjectsContainer.classList.toggle('all-projects-container');;
 
@@ -68,7 +69,6 @@ PubSub.subscribe('all projects returned', function(msg, data){
 // Re-render projects when new project is added to the todoApp projects array
 PubSub.subscribe('new project added', function(msg, data){
   renderAllProjectsView(data);
-  PubSub.publish('all projects view rendered');
 });
 
 const allProjectsTestObj = [

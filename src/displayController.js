@@ -19,6 +19,7 @@ const displayController = () => {
     const todoListItem = document.querySelectorAll('.todo-li');
     const todoDeleteBtn = document.querySelectorAll('.delete-btn');
     const todoEditBtn = document.querySelectorAll('.edit-btn');
+    const todoListExpanded = document.querySelectorAll('.todo-list-expanded');
 
     addTodoBtn.addEventListener('click', function (event) {
       PubSub.publish('add todo button clicked', event);
@@ -26,17 +27,24 @@ const displayController = () => {
 
     viewProjectsBtn.addEventListener('click', function (event) {
       PubSub.publish('view projects button clicked', event);
-      clearView(contentDiv);
     });
 
     todoListItem.forEach(item => {
       item.addEventListener('click', function (event) {
-        const todoInfo = {};
-        todoInfo.index = event.currentTarget.getAttribute('data-todo-index');
-        todoInfo.name = event.currentTarget.getAttribute('data-project-name');
-        PubSub.publish('todo clicked', todoInfo);
+        console.log(event.target);
+        if(event.currentTarget.lastChild.style.display === 'none'){
+          event.currentTarget.lastChild.style.display = 'block';
+        }else {
+          event.currentTarget.lastChild.style.display = 'none';
+        }
       });
     });
+
+    todoListExpanded.forEach(item => {
+      item.addEventListener('click', function(event){
+        event.stopPropagation();
+      })
+    })
 
     todoEditBtn.forEach(item => {
       item.addEventListener('click', function (event) {
@@ -68,7 +76,7 @@ const displayController = () => {
       project.addEventListener('click', function(event){
         console.log(event.currentTarget);
         PubSub.publish('project clicked', event.currentTarget.getAttribute('data-project-index'));
-        clearView(contentDiv);
+
       });
     });
 
@@ -76,7 +84,6 @@ const displayController = () => {
       event.preventDefault();
       PubSub.publish('new project button clicked', inputValue.value);
       inputValue.value = '';
-      clearView(contentDiv);
     });
   }
   // New todo form event listeners

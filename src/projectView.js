@@ -2,7 +2,10 @@ import PubSub from "pubsub-js";
 
 const renderProjectView = (project) => {
   const contentDiv = document.querySelector('#content');
-
+  while(contentDiv.firstChild) {
+    contentDiv.removeChild(contentDiv.firstChild);
+  }
+  
   const projectContainer = document.createElement('div');
   projectContainer.classList.toggle('project-container');
 
@@ -55,42 +58,93 @@ const renderProjectView = (project) => {
 
   // Probably need to add a data-attr for project
   // Allows for accessing project object key when selecting li
-  if(project.getTodos()) {
+  if (project.getTodos()) {
     project.getTodos().forEach((todo, index) => {
       const todoItem = document.createElement('li');
       todoItem.classList.toggle('todo-li');
       todoItem.setAttribute('data-todo-index', index);
       todoItem.setAttribute('data-project-name', project.name);
-  
+
       const todoDiv = document.createElement('div');
       todoDiv.classList.toggle('todo-div');
-  
+
       const todoName = document.createElement('p');
       todoName.appendChild(document.createTextNode(todo.name));
-  
+
       const todoDate = document.createElement('p');
       todoDate.appendChild(document.createTextNode(todo.dueDate));
-  
+
       todoDiv.appendChild(todoName);
       todoDiv.appendChild(todoDate);
       todoItem.appendChild(todoDiv)
-  
+
+      const buttonDiv = document.createElement('div');
+      buttonDiv.classList.toggle('btn-div')
+
       const editBtn = document.createElement('button');
       editBtn.classList.toggle('btn');
       editBtn.classList.toggle('edit-btn');
       editBtn.type = 'button';
       editBtn.appendChild(document.createTextNode('Edit Todo'));
-  
-      todoItem.appendChild(editBtn);
-  
+
+      buttonDiv.appendChild(editBtn);
+
       const deleteBtn = document.createElement('button');
       deleteBtn.classList.toggle('btn');
       deleteBtn.classList.toggle('delete-btn');
       deleteBtn.type = 'button';
       deleteBtn.appendChild(document.createTextNode('Delete Todo'));
-  
-      todoItem.appendChild(deleteBtn);
-  
+
+      buttonDiv.appendChild(deleteBtn);
+
+      todoDiv.appendChild(buttonDiv);
+
+      const expandedContainer = document.createElement('div');
+      expandedContainer.classList.toggle('todo-list-expanded');
+      expandedContainer.style.display = 'none';
+
+      const attrList = document.createElement('ul');
+
+      const description = document.createElement('li');
+      description.appendChild(document.createTextNode(todo.description));
+
+      const priority = document.createElement('li');
+      priority.appendChild(document.createTextNode(todo.priority));
+
+      const notes = document.createElement('li');
+      notes.appendChild(document.createTextNode(todo.notes));
+
+      const buttonContainer = document.createElement('div');
+      buttonContainer.classList.toggle('button-container');
+
+      const inputDiv = document.createElement('div');
+      inputDiv.classList.toggle('input-div');
+
+      const complete = document.createElement('input');
+      complete.type = 'Checkbox';
+      complete.id = 'complete'
+      complete.name = 'complete'
+      if (todo.complete) {
+        complete.checked = 'yes';
+      }
+
+      const completeLabel = document.createElement('label');
+      completeLabel.for = 'complete';
+      completeLabel.appendChild(document.createTextNode('Todo Complete'));
+
+      inputDiv.appendChild(complete);
+      inputDiv.appendChild(completeLabel);
+      buttonContainer.appendChild(inputDiv);
+
+      attrList.appendChild(description);
+      attrList.appendChild(priority);
+      attrList.appendChild(notes);
+
+
+      expandedContainer.appendChild(attrList);
+      expandedContainer.appendChild(buttonContainer);
+
+      todoItem.append(expandedContainer);      
       todoList.appendChild(todoItem);
     });
   }
@@ -105,19 +159,19 @@ const renderProjectView = (project) => {
 
 }
 // Render page when project clicked on allProjects view
-PubSub.subscribe('project returned', function(msg, data){
+PubSub.subscribe('project returned', function (msg, data) {
   renderProjectView(data);
 })
 // Render page when new todo added
-PubSub.subscribe('todo added', function(msg, data){
+PubSub.subscribe('todo added', function (msg, data) {
   renderProjectView(data);
 });
 // Re-render when todo updated
-PubSub.subscribe('todo updated', function(msg, data){
+PubSub.subscribe('todo updated', function (msg, data) {
   renderProjectView(data);
 });
 // Re-render when todo deleted
-PubSub.subscribe('todo deleted', function(msg, data){
+PubSub.subscribe('todo deleted', function (msg, data) {
   renderProjectView(data);
 });
 
@@ -140,4 +194,4 @@ const projectTestObj = {
 }
 
 
-export {renderProjectView, projectTestObj};
+export { renderProjectView, projectTestObj };

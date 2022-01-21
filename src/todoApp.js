@@ -8,12 +8,13 @@ export const todoApp = () => {
 
   // Create project objects with empty todos array property
   const addProject = (projectName) => {
-    projects.forEach(project => {
-      if (project.name === projectName) {
+    for (let i = 0; i < projects.length; i++) {
+      if (projects[i].name === projectName) {
         console.log('Project name already used');
         PubSub.publish('Project name already in use', projectName);
-      }
-    });
+        break
+      } 
+    }
     projects.push(createProject(projectName));
     console.log(`${projectName} added!`);
     PubSub.publish('project added', projects);
