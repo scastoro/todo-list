@@ -109,6 +109,7 @@ export const renderTodoForm = (obj) => {
 
   const todoSubmitBtn = document.createElement('input');
   todoSubmitBtn.type = 'button';
+
   if(obj){
     todoSubmitBtn.value = 'Edit todo';
     todoSubmitBtn.id ='edit-todo-submit-btn';
@@ -118,7 +119,6 @@ export const renderTodoForm = (obj) => {
   }
 
   todoForm.appendChild(todoSubmitBtn);
-
 
   formDiv.appendChild(todoForm);
   formContainer.appendChild(formDiv);
@@ -134,4 +134,4 @@ export const renderTodoForm = (obj) => {
 // Subscribe to when add todo button is clicked
 PubSub.subscribe('add todo button clicked', function(msg, data){
   renderTodoForm();
-})
+});

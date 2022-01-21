@@ -17,7 +17,8 @@ const displayController = () => {
     const addTodoBtn = document.querySelector('#add-todo-btn');
     const viewProjectsBtn = document.querySelector('#view-projects-btn');
     const todoListItem = document.querySelectorAll('.todo-li');
-    const todoDeleteBtn = document.querySelectorAll('#delete-btn');
+    const todoDeleteBtn = document.querySelectorAll('.delete-btn');
+    const todoEditBtn = document.querySelectorAll('.edit-btn');
 
     addTodoBtn.addEventListener('click', function (event) {
       PubSub.publish('add todo button clicked', event);
@@ -33,6 +34,15 @@ const displayController = () => {
         todoInfo.index = event.currentTarget.getAttribute('data-todo-index');
         todoInfo.name = event.currentTarget.getAttribute('data-project-name');
         PubSub.publish('todo clicked', todoInfo);
+      });
+    });
+
+    todoEditBtn.forEach(item => {
+      item.addEventListener('click', function (event) {
+        const todoInfo = {};
+        todoInfo.index = event.currentTarget.getAttribute('data-todo-index');
+        todoInfo.name = event.currentTarget.getAttribute('data-project-name');
+        PubSub.publish('todo edit button clicked', todoInfo);
       });
     });
 
@@ -55,18 +65,23 @@ const displayController = () => {
     });
   }
   // New todo form event listeners
-  const createNewTodoFormListeners = () => {
-    const newTodoFormBtn = document.querySelector('#new-todo-submit-btn');
-    const newTodoForm = document.querySelector('#todo-form');
+  const createTodoFormListeners = () => {
+    const todoForm = document.querySelector('#todo-form');
+    let todoFormBtn;
+    if(todoForm.hasAttribute('data-todo-index')) {
+      todoFormBtn = document.querySelector('#edit-todo-submit-btn');
+    } else {
+      todoFormBtn = document.querySelector('#new-todo-submit-btn');
+    }
     const newTodoRadioBtn = document.querySelector('#todo-complete-yes');
     const projectHeader = document.querySelector('.project-header');
     const todoFormContainer = document.querySelector('.new-todo-form-container');
 
     const getFormInput = () => {
-      const name = newTodoForm['todo-name'].value;
-      const description = newTodoForm['todo-description'].value;
-      const dueDate = newTodoForm['todo-dueDate'].value;
-      const priority = newTodoForm['todo-priority'].value;
+      const name = todoForm['todo-name'].value;
+      const description = todoForm['todo-description'].value;
+      const dueDate = todoForm['todo-dueDate'].value;
+      const priority = todoForm['todo-priority'].value;
       let complete;
       if(newTodoRadioBtn.checked){
         complete = true;
@@ -77,11 +92,17 @@ const displayController = () => {
 
       const newTodo = createTodo(name, description, dueDate, priority, complete, project);
 
-      PubSub.publish('new todo submitted', newTodo);
+      if(todoForm.hasAttribute('data-todo-index')){
+        newTodo.index = todoForm.getAttribute('data-todo-index');
+        PubSub.publish('edit todo submitted', newTodo);
+      }else {
+        PubSub.publish('new todo submitted', newTodo);
+      }
+
       
     }
 
-    newTodoFormBtn.addEventListener('click', function() {
+    todoFormBtn.addEventListener('click', function() {
       getFormInput()
       document.body.removeChild(todoFormContainer);
     }
@@ -98,12 +119,20 @@ const displayController = () => {
     printData(data);
   });
 
-  PubSub.subscribe('all projects rendered', function(msg, data){
+  PubSub.subscribe('all projects view rendered', function(msg, data){
     createAllProjectsListeners();
   });
 
+  PubSub.subscribe('project view rendered', function(msg, data){
+    createProjectListeners();
+  })
+
   PubSub.subscribe('new todo form rendered', function(msg, data){
-    createNewTodoFormListeners();
+    createTodoFormListeners();
+  });
+
+  PubSub.subscribe('edit todo form rendered', function(msg, data){
+    createTodoFormListeners();;
   })
   
   // createProjectListeners();

@@ -51,6 +51,8 @@ const renderAllProjectsView = (projects) => {
   allProjectsContainer.appendChild(projectsHeaderDiv);
   allProjectsContainer.appendChild(projectsDivContainer);
   contentDiv.appendChild(allProjectsContainer);
+
+  PubSub.publish('all projects view rendered');
 }
 
 // Receive projects array from todoApp publish and generate all projects view
@@ -60,7 +62,7 @@ PubSub.subscribe('all projects returned', function(msg, data){
 // Re-render projects when new project is added to the todoApp projects array
 PubSub.subscribe('new project added', function(msg, data){
   renderAllProjectsView(data);
-  PubSub.publish('all projects rendered')
+  PubSub.publish('all projects view rendered');
 });
 
 const allProjectsTestObj = [

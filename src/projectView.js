@@ -74,9 +74,17 @@ const renderProjectView = (project) => {
     todoDiv.appendChild(todoDate);
     todoItem.appendChild(todoDiv)
 
+    const editBtn = document.createElement('button');
+    editBtn.classList.toggle('btn');
+    editBtn.classList.toggle('edit-btn');
+    editBtn.type = 'button';
+    editBtn.appendChild(document.createTextNode('Edit Todo'));
+
+    todoItem.appendChild(editBtn);
+
     const deleteBtn = document.createElement('button');
-    deleteBtn.id = 'delete-btn';
     deleteBtn.classList.toggle('btn');
+    deleteBtn.classList.toggle('delete-btn');
     deleteBtn.type = 'button';
     deleteBtn.appendChild(document.createTextNode('Delete Todo'));
 
@@ -90,6 +98,8 @@ const renderProjectView = (project) => {
   projectContainer.appendChild(headerDiv);
   projectContainer.appendChild(todoContainer);
   contentDiv.appendChild(projectContainer);
+
+  PubSub.publish('project view rendered', project);
 }
 
 const projectTestObj = {
