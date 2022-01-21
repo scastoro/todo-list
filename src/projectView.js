@@ -55,43 +55,45 @@ const renderProjectView = (project) => {
 
   // Probably need to add a data-attr for project
   // Allows for accessing project object key when selecting li
-  project.todos.forEach((todo, index) => {
-    const todoItem = document.createElement('li');
-    todoItem.classList.toggle('todo-li');
-    todoItem.setAttribute('data-todo-index', index);
-    todoItem.setAttribute('data-project-name', project.name);
-
-    const todoDiv = document.createElement('div');
-    todoDiv.classList.toggle('todo-div');
-
-    const todoName = document.createElement('p');
-    todoName.appendChild(document.createTextNode(todo.name));
-
-    const todoDate = document.createElement('p');
-    todoDate.appendChild(document.createTextNode(todo.date));
-
-    todoDiv.appendChild(todoName);
-    todoDiv.appendChild(todoDate);
-    todoItem.appendChild(todoDiv)
-
-    const editBtn = document.createElement('button');
-    editBtn.classList.toggle('btn');
-    editBtn.classList.toggle('edit-btn');
-    editBtn.type = 'button';
-    editBtn.appendChild(document.createTextNode('Edit Todo'));
-
-    todoItem.appendChild(editBtn);
-
-    const deleteBtn = document.createElement('button');
-    deleteBtn.classList.toggle('btn');
-    deleteBtn.classList.toggle('delete-btn');
-    deleteBtn.type = 'button';
-    deleteBtn.appendChild(document.createTextNode('Delete Todo'));
-
-    todoItem.appendChild(deleteBtn);
-
-    todoList.appendChild(todoItem);
-  });
+  if(project.getTodos()) {
+    project.getTodos().forEach((todo, index) => {
+      const todoItem = document.createElement('li');
+      todoItem.classList.toggle('todo-li');
+      todoItem.setAttribute('data-todo-index', index);
+      todoItem.setAttribute('data-project-name', project.name);
+  
+      const todoDiv = document.createElement('div');
+      todoDiv.classList.toggle('todo-div');
+  
+      const todoName = document.createElement('p');
+      todoName.appendChild(document.createTextNode(todo.name));
+  
+      const todoDate = document.createElement('p');
+      todoDate.appendChild(document.createTextNode(todo.dueDate));
+  
+      todoDiv.appendChild(todoName);
+      todoDiv.appendChild(todoDate);
+      todoItem.appendChild(todoDiv)
+  
+      const editBtn = document.createElement('button');
+      editBtn.classList.toggle('btn');
+      editBtn.classList.toggle('edit-btn');
+      editBtn.type = 'button';
+      editBtn.appendChild(document.createTextNode('Edit Todo'));
+  
+      todoItem.appendChild(editBtn);
+  
+      const deleteBtn = document.createElement('button');
+      deleteBtn.classList.toggle('btn');
+      deleteBtn.classList.toggle('delete-btn');
+      deleteBtn.type = 'button';
+      deleteBtn.appendChild(document.createTextNode('Delete Todo'));
+  
+      todoItem.appendChild(deleteBtn);
+  
+      todoList.appendChild(todoItem);
+    });
+  }
 
   todoContainer.appendChild(todoList);
 
@@ -100,7 +102,24 @@ const renderProjectView = (project) => {
   contentDiv.appendChild(projectContainer);
 
   PubSub.publish('project view rendered', project);
+
 }
+// Render page when project clicked on allProjects view
+PubSub.subscribe('project returned', function(msg, data){
+  renderProjectView(data);
+})
+// Render page when new todo added
+PubSub.subscribe('todo added', function(msg, data){
+  renderProjectView(data);
+});
+// Re-render when todo updated
+PubSub.subscribe('todo updated', function(msg, data){
+  renderProjectView(data);
+});
+// Re-render when todo deleted
+PubSub.subscribe('todo deleted', function(msg, data){
+  renderProjectView(data);
+});
 
 const projectTestObj = {
   name: 'Default',
@@ -119,9 +138,6 @@ const projectTestObj = {
     },
   ]
 }
-// Render page when new todo added
-PubSub.subscribe('new todo added', function(msg, data){
-  renderProjectView(data);
-})
+
 
 export {renderProjectView, projectTestObj};

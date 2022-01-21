@@ -1,14 +1,15 @@
-import PubSub, { publish } from "pubsub-js";
+import PubSub from "pubsub-js";
 import createTodo from "./createTodo";
 import createProject from "./createProject";
 
 export const todoApp = () => {
   const projects = [];
 
+
   // Create project objects with empty todos array property
   const addProject = (projectName) => {
     projects.forEach(project => {
-      if(project.name === projectName){
+      if (project.name === projectName) {
         console.log('Project name already used');
         PubSub.publish('Project name already in use', projectName);
       }
@@ -17,33 +18,25 @@ export const todoApp = () => {
     console.log(`${projectName} added!`);
     PubSub.publish('project added', projects);
   }
-  
-  addProject('test');
+
+  addProject('default');
 
   // Add todo by searching projects list and pushing todo argument to todos property
   const addTodo = (obj) => {
     projects.forEach(project => {
       if (project.name === obj.project) {
         project.addTodo(obj);
-        PubSub.publish('todo added', project.getTodos());
-        console.dir(project.getTodos());
+        PubSub.publish('todo added', project);
+        console.dir(project);
       }
     });
 
   }
 
-  addTodo({name: 'test todo', description: 'test description', project: 'test'});
   // Get project
-  const getProject = (projectName) => {
-    projects.forEach(project => {
-      if (project.name === projectName) {
-        PubSub.publish('project returned', project);
-        console.dir(project);
-      } else {
-        PubSub.publish('project not found', projectName);
-        console.log('Project not found');
-      }
-    });
+  const getProject = (index) => {
+    PubSub.publish('project returned', projects[index]);
+    console.log(projects[index]);
   }
   // Get all projects
   const getAllProjects = () => {
@@ -67,12 +60,14 @@ export const todoApp = () => {
   const getTodo = (obj) => {
     // Iterate through projects and find if name is present then check if todo is present at index argument
     for (let i = 0; i < projects.length; i++) {
-      if(projects[i].name === obj.name){
+      if (projects[i].name === obj.name) {
         console.log(projects[i].getTodo(obj.index));
-        return projects[i].getTodo(obj.index);
+        let currentTodo = projects[i].getTodo(obj.index);
+        currentTodo.index = obj.index;
+        return currentTodo;
       } else {
         console.log('todo not found');
-        return 'todo not found.'
+        return 'todo not found.';
       }
     }
   }
@@ -81,18 +76,13 @@ export const todoApp = () => {
     index: '0'
   }
 
-  getTodo(testObject);
-  getAllTodos('test');
-  getProject('test');
-
-
   // Update todo
   const updateTodo = (obj) => {
     projects.forEach(project => {
-      if (project.name === obj.projectName) {
+      if (project.name === obj.todo.project) {
         project.updateTodo(obj.index, obj.todo)
-        PubSub.publish('todo updated', project.getTodos());
-        console.log(project.getTodos());
+        PubSub.publish('todo updated', project);
+        console.log(project);
       } else {
         console.log('todo not found');
         PubSub.publish('todo not found', projectName);
@@ -109,7 +99,7 @@ export const todoApp = () => {
   // Delete Project
   const deleteProject = (projectName) => {
     projects.forEach((project, index) => {
-      if(project.name === projectName){
+      if (project.name === projectName) {
         projects.splice(index, 1);
         console.log(`${project} deleted`);
         PubSub.publish('project deleted', projects)
@@ -122,10 +112,10 @@ export const todoApp = () => {
   // Delete Todo
   const deleteTodo = (obj) => {
     projects.forEach(project => {
-      if(project.name === obj.projectName){
+      if (project.name === obj.name) {
         console.log(`${project.getTodo(obj.index)} deleted`);
         project.deleteTodo(obj.index);
-        PubSub.publish('todo deleted', project.todos)
+        PubSub.publish('todo deleted', project)
       } else {
         PubSub.publish('todo not found', obj);
         console.log('todo not found');
@@ -133,45 +123,67 @@ export const todoApp = () => {
     });
   }
   // addProject('Default');
-  // const testProjectObj = {
-  //   name: 'Default',
-  //   todo: 
-  //     {
-  //       description: 'This is a test Description',
-  //       priority: 1,
-  //       notes: 'Here are some notes',
-  //       complete: true
-  //     }
-    
-  // };
-  // addTodo(testProjectObj);
+  const testProjectObj = {
+    project: 'default',
+    name: 'test todo',
+    description: 'This is a test Description',
+    dueDate: 'Jan 2nd',
+    priority: 1,
+    notes: 'Here are some notes',
+    complete: true
+
+
+  };
+  addTodo(testProjectObj);
 
   // Add subscribe events from PubSub module
   // Need to listen to corresponding click events from the displayController
   // These click events need to be from the submit buttons on the forms that are generated by the displayController
   // To subscribe to an event with pubsub you need to use a subscriber function: function(msg, data){ pass callback here }
 
+  // Display all projects view on first page load
+  PubSub.subscribe('initial page load', function (msg, data) {
+    console.log('first page load');
+    PubSub.publish('first page load', getAllProjects());
+  })
   // Add new project with name from new project name form
   // Then publish new array for allProjects.js to subscribe to
-  PubSub.subscribe('new project button clicked', function(msg, data){
+  PubSub.subscribe('new project button clicked', function (msg, data) {
     addProject(data);
     console.log(getAllProjects());
     PubSub.publish('new project added', getAllProjects());
   })
   // Subscribe to view projects button click then publish all projects returned with projects array as data
-  PubSub.subscribe('view projects button clicked', function(msg, data){
+  PubSub.subscribe('view projects button clicked', function (msg, data) {
     console.log('all projects returned');
     PubSub.publish('all projects returned', getAllProjects())
   });
   // Add new todo
-  PubSub.subscribe('new todo submitted', function(msg, data){
+  PubSub.subscribe('new todo submitted', function (msg, data) {
     addTodo(data);
-    PubSub.publish('new todo added', getAllTodos());
-  })
+    // PubSub.publish('new todo added', getAllTodos());
+  });
   // Return todo when clicked
-  PubSub.subscribe('todo clicked', function(msg, data){
+  PubSub.subscribe('todo clicked', function (msg, data) {
     console.log('todo returned');
     PubSub.publish('todo returned', getTodo(data));
-    getAllProjects()
+  });
+  // Also return todo when edit btn clicked
+  PubSub.subscribe('todo edit button clicked', function (msg, data) {
+    console.log('edit todo returned');
+    PubSub.publish('edit todo returned', getTodo(data));
+  });
+  PubSub.subscribe('edit todo submitted', function (msg, data) {
+    updateTodo(data);
+    // PubSub.publish('todo updated')
+  });
+  // Return project data when project clicked
+  PubSub.subscribe('project clicked', function (msg, data) {
+    getProject(data);
+  });
+  // Delete todo when delete button clicked
+  PubSub.subscribe('todo delete button clicked', function(msg, data){
+    deleteTodo(data);
+    console.log('delete received in todoApp');
   });
 }

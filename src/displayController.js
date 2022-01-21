@@ -26,6 +26,7 @@ const displayController = () => {
 
     viewProjectsBtn.addEventListener('click', function (event) {
       PubSub.publish('view projects button clicked', event);
+      clearView(contentDiv);
     });
 
     todoListItem.forEach(item => {
@@ -39,16 +40,21 @@ const displayController = () => {
 
     todoEditBtn.forEach(item => {
       item.addEventListener('click', function (event) {
+        event.stopPropagation();
         const todoInfo = {};
-        todoInfo.index = event.currentTarget.getAttribute('data-todo-index');
-        todoInfo.name = event.currentTarget.getAttribute('data-project-name');
+        todoInfo.index = event.currentTarget.parentElement.getAttribute('data-todo-index');
+        todoInfo.name = event.currentTarget.parentElement.getAttribute('data-project-name');
         PubSub.publish('todo edit button clicked', todoInfo);
       });
     });
 
     todoDeleteBtn.forEach(item => {
       item.addEventListener('click', function (event) {
-        PubSub.publish('todo delete button clicked', event);
+        event.stopPropagation();
+        const todoInfo = {};
+        todoInfo.index = event.currentTarget.parentElement.getAttribute('data-todo-index');
+        todoInfo.name = event.currentTarget.parentElement.getAttribute('data-project-name');
+        PubSub.publish('todo delete button clicked', todoInfo);
       });
     });
   };
@@ -56,6 +62,15 @@ const displayController = () => {
   const createAllProjectsListeners = () => {
     const newProjectBtn = document.querySelector('#new-project-btn');
     const inputValue = document.querySelector('#project-name-input');
+    const projectDivs = document.querySelectorAll('.project-div');
+
+    projectDivs.forEach(project => {
+      project.addEventListener('click', function(event){
+        console.log(event.currentTarget);
+        PubSub.publish('project clicked', event.currentTarget.getAttribute('data-project-index'));
+        clearView(contentDiv);
+      });
+    });
 
     newProjectBtn.addEventListener('click', function (event) {
       event.preventDefault();
@@ -93,12 +108,15 @@ const displayController = () => {
       const newTodo = createTodo(name, description, dueDate, priority, complete, project);
 
       if(todoForm.hasAttribute('data-todo-index')){
-        newTodo.index = todoForm.getAttribute('data-todo-index');
-        PubSub.publish('edit todo submitted', newTodo);
+        let newTodoInfo = {};
+        newTodoInfo.index = todoForm.getAttribute('data-todo-index');
+        newTodoInfo.todo = newTodo;
+        PubSub.publish('edit todo submitted', newTodoInfo);
       }else {
         PubSub.publish('new todo submitted', newTodo);
       }
 
+      clearView(contentDiv);
       
     }
 
@@ -136,7 +154,11 @@ const displayController = () => {
   })
   
   // createProjectListeners();
-  createAllProjectsListeners();
+  // createAllProjectsListeners();
+
+  window.addEventListener('load', function(){
+    PubSub.publish('initial page load');
+  }, {once: true});
 }
 
 export { displayController };

@@ -129,9 +129,13 @@ export const renderTodoForm = (obj) => {
   }else {
     PubSub.publish('new todo form rendered')
   }
+  
 }
-
 // Subscribe to when add todo button is clicked
 PubSub.subscribe('add todo button clicked', function(msg, data){
   renderTodoForm();
+});
+// Subscribe to when edit todo data is returned
+PubSub.subscribe('edit todo returned', function(msg, data){
+  renderTodoForm(data);
 });

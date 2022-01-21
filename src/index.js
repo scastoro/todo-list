@@ -18,9 +18,9 @@ let header = document.createElement('h1');
 
 // renderProjectView(projectTestObj);
 
-renderAllProjectsView(allProjectsTestObj);
+// renderAllProjectsView();
 
-renderTodoForm();
+// renderTodoForm();
 
 displayController();
 
