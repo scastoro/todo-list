@@ -1,10 +1,10 @@
 import css from './style.css';
 import {expandedTodo, testObj} from './expandedTodo';
 import {renderProjectView, projectTestObj} from './projectView';
-import {renderAllProjectsView, allProjectsTestObj} from './allProjects';
+import {renderAllProjectsView, allProjectsTestObj} from './allProjectsView';
 import {displayController} from './displayController';
 import {todoApp} from './todoApp';
-import {renderTodoForm} from './newTodoForm';
+import {renderTodoForm} from './todoForm';
 
 console.log('Hello there!')
 

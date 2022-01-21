@@ -22,8 +22,8 @@ export const todoApp = () => {
   // Add todo by searching projects list and pushing todo argument to todos property
   const addTodo = (obj) => {
     projects.forEach(project => {
-      if (project.name === obj.name) {
-        project.addTodo(obj.todo);
+      if (project.name === obj.project) {
+        project.addTodo(obj);
         PubSub.publish('todo added', project.getTodos());
         console.dir(project.getTodos());
       }

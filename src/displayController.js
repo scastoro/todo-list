@@ -56,7 +56,7 @@ const displayController = () => {
   }
   // New todo form event listeners
   const createNewTodoFormListeners = () => {
-    const newTodoBtn = document.querySelector('#new-todo-submit-btn');
+    const newTodoFormBtn = document.querySelector('#new-todo-submit-btn');
     const newTodoForm = document.querySelector('#todo-form');
     const newTodoRadioBtn = document.querySelector('#todo-complete-yes');
     const projectHeader = document.querySelector('.project-header');
@@ -81,7 +81,7 @@ const displayController = () => {
       
     }
 
-    newTodoBtn.addEventListener('click', function() {
+    newTodoFormBtn.addEventListener('click', function() {
       getFormInput()
       document.body.removeChild(todoFormContainer);
     }
