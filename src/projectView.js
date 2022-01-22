@@ -86,7 +86,8 @@ const renderProjectView = (project) => {
       editBtn.classList.toggle('edit-btn');
       editBtn.type = 'button';
       editBtn.appendChild(document.createTextNode('Edit Todo'));
-
+      editBtn.setAttribute('data-todo-index', index);
+      editBtn.setAttribute('data-project-name', project.name);
       buttonDiv.appendChild(editBtn);
 
       const deleteBtn = document.createElement('button');
