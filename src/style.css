@@ -1,3 +1,155 @@
-h1 {
-  color: red;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #446DBB;
+}
+.btn {
+  background-color: #44A9BB;
+  padding: 5px;
+  cursor: pointer;
+  color: white;
+  border: #44A9BB 1px solid;
+  border-radius: 7px;
+}
+/* All Projects View Styling */
+.all-projects-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+/* All Projects header styling */
+.all-projects-container .projects-header-container{
+  margin: 30px 0;
+}
+.all-projects-container .projects-header-container .all-projects-header {
+  margin-bottom: 15px;
+  color: white;
+  text-align: center;
+}
+#project-name-input {
+  padding: 5px;
+  border: 1px white solid;
+  border-radius: 7px 0 0 7px;
+}
+#new-project-btn.btn{
+  background-color: #44A9BB;
+  padding: 5px;
+  cursor: pointer;
+  color: white;
+  border: #44A9BB 1px solid;
+  border-radius: 0 7px 7px 0;
+}
+.all-projects-container .projects-div-container{
+  width: 60%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.all-projects-container .projects-div-container .project-div {
+  height: 100px;
+  background-color: #44A9BB;
+  color: white;
+  cursor: pointer;
+  flex: 1 1 30%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: #44A9BB 1px solid;
+  border-radius: 10px;
+}
+
+/* Project View Styling */
+.project-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+}
+/* Project header div styling */
+.project-container .header-div {
+  margin: 20px 0;
+  margin-left: 16px;
+  display: flex;
+}
+.project-container .header-div .header-div-left {
+  margin-right: 20px;
+}
+.project-container .header-div .header-div-left .project-header{
+  font-size: 50px;
+}
+#view-projects-btn {
+  margin-top: 15px;
+}
+/* Project todo styling */
+.project-container .todo-container{
+  width: 50%;
+}
+/* Project todo header Styling */
+.project-container .todo-container .todo-header {
+  font-size: 30px;
+  margin: 15px 0;
+}
+/* Todo styling */
+.project-container .todo-container .todo-list {
+  list-style: none;
+}
+.project-container .todo-container .todo-list .todo-li {
+  margin: 15px 0;
+}
+.todo-div::before{
+  width: 15px;
+  content: "\2023";
+  font-size: 28px;
+}
+.todo-div.expanded::before{
+  height: 33px;
+  /* margin-top: 3px; */
+  content: "\25BE";
+  font-size: 20px;
+}
+.project-container .todo-container .todo-list .todo-li .todo-div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.project-container .todo-container .todo-list .todo-li .todo-div .btn-div {
+  margin-left: 10px;
+}
+.project-container .todo-container .todo-list .todo-li .todo-div .btn-div .edit-btn {
+  margin-right: 10px;
+}
+.project-container .todo-container .todo-list .todo-li .todo-list-expanded {
+  margin-left: 40px;
+}
+/* New todo form Styling */
+.new-todo-form-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.new-todo-form-container .todo-form-div{
+  background-color: white;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+#todo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

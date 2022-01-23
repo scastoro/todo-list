@@ -90,17 +90,17 @@ export const todoApp = () => {
   // Get todo
   const getTodo = (obj) => {
     // Iterate through projects and find if name is present then check if todo is present at index argument
+    console.log(obj);
+    console.log(projects);
     for (let i = 0; i < projects.length; i++) {
       if (projects[i].name === obj.name) {
         console.log(projects[i].getTodo(obj.index));
         let currentTodo = projects[i].getTodo(obj.index);
         currentTodo.index = obj.index;
         return currentTodo;
-      } else {
-        console.log('todo not found');
-        return 'todo not found.';
-      }
+      } 
     }
+    return 'project not found';
   }
 
   // Update todo
@@ -155,11 +155,10 @@ export const todoApp = () => {
   
         storeProjects();
         PubSub.publish('todo deleted', project)
-      } else {
-        PubSub.publish('todo not found', obj);
-        console.log('todo not found');
-      }
+      } 
     });
+    PubSub.publish('todo not found', obj);
+    console.log('todo not found');
   }
 
   // Add subscribe events from PubSub module
@@ -196,7 +195,7 @@ export const todoApp = () => {
   });
   // Also return todo when edit btn clicked
   PubSub.subscribe('todo edit button clicked', function (msg, data) {
-    console.log('edit todo returned');
+    console.log(data);
     PubSub.publish('edit todo returned', getTodo(data));
   });
   PubSub.subscribe('edit todo submitted', function (msg, data) {

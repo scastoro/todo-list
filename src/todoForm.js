@@ -2,6 +2,7 @@ import PubSub from "pubsub-js";
 
 // Form to be rendered when todo button is clicked
 export const renderTodoForm = (obj) => {
+  console.log(obj);
   const formContainer = document.createElement('div');
   formContainer.classList.toggle('new-todo-form-container');
 

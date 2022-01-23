@@ -37,6 +37,7 @@ const displayController = () => {
         }else {
           event.currentTarget.lastChild.style.display = 'none';
         }
+        event.currentTarget.firstChild.classList.toggle('expanded');
       });
     });
 
@@ -62,8 +63,8 @@ const displayController = () => {
       item.addEventListener('click', function (event) {
         event.stopPropagation();
         const todoInfo = {};
-        todoInfo.index = event.currentTarget.parentElement.getAttribute('data-todo-index');
-        todoInfo.name = event.currentTarget.parentElement.getAttribute('data-project-name');
+        todoInfo.index = event.currentTarget.getAttribute('data-todo-index');
+        todoInfo.name = event.currentTarget.getAttribute('data-project-name');
         PubSub.publish('todo delete button clicked', todoInfo);
       });
     });
@@ -124,8 +125,6 @@ const displayController = () => {
       }else {
         PubSub.publish('new todo submitted', newTodo);
       }
-
-      clearView(contentDiv);
       
     }
 
