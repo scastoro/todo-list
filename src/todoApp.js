@@ -7,7 +7,6 @@ export const todoApp = () => {
   // Retrieve projects strings from localStorage and convert them to objects
   if (window.localStorage.getItem('localProjects')) {
     projects = JSON.parse(window.localStorage.getItem('localProjects'));
-    // Convert the object literals back into project objects
     for (let i = 0; i < projects.length; i++) {
       projects[i] = createProject(projects[i].name, projects[i].todos);
     }
@@ -29,7 +28,7 @@ export const todoApp = () => {
       if (projects[i].name === projectName) {
         console.log('Project name already used');
         PubSub.publish('Project name already in use', projectName);
-        break;
+        return;
       }
     }
     projects.push(createProject(projectName));
@@ -46,20 +45,10 @@ export const todoApp = () => {
         storeProjects();
         PubSub.publish('todo added', projects[i]);
         console.dir(projects[i]);
-        break;
-      } else {
-        console.log('project not found');
-      }
+        return;
+      } 
     }
-    // projects.forEach(project => {
-    //   if (project.name === obj.project) {
-    //     project.addTodo(obj);
-    //     window.localStorage.setItem('localProjects', JSON.stringify(projects));
-    //     PubSub.publish('todo added', project);
-    //     console.dir(project);
-    //   }
-    // });
-
+    console.log('project not found');
   }
 
   // Get project
@@ -111,23 +100,11 @@ export const todoApp = () => {
         storeProjects();
         PubSub.publish('todo updated', projects[i]);
         console.log(projects[i]);
-        break;
-      } else {
-        console.log('todo not found');
-        return 'todo not found.';
-      }
+        return;
+      } 
     }
-    // projects.forEach(project => {
-    //   if (project.name === obj.todo.project) {
-    //     project.updateTodo(obj.index, obj.todo);
-    //     window.localStorage.setItem('localProjects', JSON.stringify(projects));
-    //     PubSub.publish('todo updated', project);
-    //     console.log(project);
-    //   } else {
-    //     console.log('todo not found');
-    //     PubSub.publish('todo not found', project);
-    //   }
-    // });
+    console.log('todo not found');
+    return 'todo not found.';
   }
   // Update Project
 
@@ -148,15 +125,15 @@ export const todoApp = () => {
   }
   // Delete Todo
   const deleteTodo = (obj) => {
-    projects.forEach(project => {
-      if (project.name === obj.name) {
-        console.log(`${project.getTodo(obj.index)} deleted`);
-        project.deleteTodo(obj.index);
-  
+    for (let i = 0; i < projects.length; i++) {
+      if (projects[i].name === obj.name) {
+        console.log(`${JSON.stringify(projects[i].getTodo(obj.index))} deleted`);
+        projects[i].deleteTodo(obj.index);
         storeProjects();
-        PubSub.publish('todo deleted', project)
+        PubSub.publish('todo deleted', projects[i]);
+        return;
       } 
-    });
+    }
     PubSub.publish('todo not found', obj);
     console.log('todo not found');
   }

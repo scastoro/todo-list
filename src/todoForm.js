@@ -11,7 +11,11 @@ export const renderTodoForm = (obj) => {
 
   const todoHeader = document.createElement('h3');
   todoHeader.id = 'new-todo-header';
-  todoHeader.appendChild(document.createTextNode('Add New Todo'));
+  if(obj){
+    todoHeader.appendChild(document.createTextNode('Edit Todo'));
+  } else {
+    todoHeader.appendChild(document.createTextNode('Add New Todo'));
+  }
 
   formDiv.appendChild(todoHeader);
 
@@ -45,7 +49,7 @@ export const renderTodoForm = (obj) => {
 
   const dueDateInput = document.createElement('input');
   dueDateInput.id = 'todo-dueDate';
-  dueDateInput.type = 'text';
+  dueDateInput.type = 'date';
   dueDateInput.placeholder = 'Due date';
   dueDateInput.dueDate = 'todo-dueDate';
   if(obj){
@@ -54,21 +58,47 @@ export const renderTodoForm = (obj) => {
 
   todoForm.appendChild(dueDateInput);
 
-  const priorityInput = document.createElement('input');
-  priorityInput.id = 'todo-priority';
-  priorityInput.type = 'text';
-  priorityInput.placeholder = 'priority';
-  priorityInput.priority = 'todo-priority';
+  const priorityDiv = document.createElement('div');
+  priorityDiv.classList.toggle('priority-div');
+
+  const priorityLabel = document.createElement('label');
+  priorityLabel.for = 'todo-priority';
+  priorityLabel.appendChild(document.createTextNode('Priority Level:'));
+
+  priorityDiv.appendChild(priorityLabel);
+
+  const prioritySelect = document.createElement('select');
+  prioritySelect.id = 'todo-priority';
+  prioritySelect.name = 'todo-priority';
   if(obj){
-    priorityInput.value = obj.priority
+    prioritySelect.value = obj.priority
   }
 
-  todoForm.appendChild(priorityInput);
+  const priorityOptHigh = document.createElement('option');
+  priorityOptHigh.value = 'high';
+  priorityOptHigh.appendChild(document.createTextNode('High'));
+  prioritySelect.appendChild(priorityOptHigh);
+ 
+  const priorityOptMedium = document.createElement('option');
+  priorityOptMedium.value = 'medium';
+  priorityOptMedium.appendChild(document.createTextNode('Medium'));
+  prioritySelect.appendChild(priorityOptMedium);
+ 
+  const priorityOptLow = document.createElement('option');
+  priorityOptLow.value = 'low';
+  priorityOptLow.appendChild(document.createTextNode('Low'));
+  prioritySelect.appendChild(priorityOptLow);
+ 
+  priorityDiv.appendChild(prioritySelect);
+  todoForm.appendChild(priorityDiv);
 
-  const completePara = document.createElement('p');
-  completePara.appendChild(document.createTextNode('Todo Complete?'))
+  const completeDiv = document.createElement('div');
+  completeDiv.classList.toggle('complete-div');
 
-  todoForm.appendChild(completePara);
+  const completeLabel = document.createElement('label');
+  completeLabel.appendChild(document.createTextNode('Todo Complete?'))
+
+  completeDiv.appendChild(completeLabel);
 
   const completeYesInput = document.createElement('input');
   completeYesInput.id = 'todo-complete-yes';
@@ -81,13 +111,13 @@ export const renderTodoForm = (obj) => {
     }
   }
 
-  todoForm.appendChild(completeYesInput);
+  completeDiv.appendChild(completeYesInput);
 
   const completeYesLabel = document.createElement('label');
   completeYesLabel.for = 'Yes';
   completeYesLabel.appendChild(document.createTextNode('Yes'));
 
-  todoForm.appendChild(completeYesLabel);
+  completeDiv.appendChild(completeYesLabel);
 
   const completeNoInput = document.createElement('input');
   completeNoInput.id = 'todo-complete-no';
@@ -100,13 +130,14 @@ export const renderTodoForm = (obj) => {
     }
   }
 
-  todoForm.appendChild(completeNoInput);
+  completeDiv.appendChild(completeNoInput);
 
   const completeNoLabel = document.createElement('label');
   completeNoLabel.for = 'No';
   completeNoLabel.appendChild(document.createTextNode('No'));
 
-  todoForm.appendChild(completeNoLabel);
+  completeDiv.appendChild(completeNoLabel);
+  todoForm.appendChild(completeDiv);
 
   const todoSubmitBtn = document.createElement('input');
   todoSubmitBtn.type = 'button';

@@ -1,4 +1,5 @@
 import PubSub from "pubsub-js";
+import { parseISO, format } from "date-fns";
 
 const renderProjectView = (project) => {
   const contentDiv = document.querySelector('#content');
@@ -72,7 +73,8 @@ const renderProjectView = (project) => {
       todoName.appendChild(document.createTextNode(todo.name));
 
       const todoDate = document.createElement('p');
-      todoDate.appendChild(document.createTextNode(todo.dueDate));
+      const dateString = `Date Due: ${format(parseISO(todo.dueDate), 'MMMM do yyyy')}`
+      todoDate.appendChild(document.createTextNode(dateString));
 
       todoDiv.appendChild(todoName);
       todoDiv.appendChild(todoDate);
@@ -95,6 +97,8 @@ const renderProjectView = (project) => {
       deleteBtn.classList.toggle('delete-btn');
       deleteBtn.type = 'button';
       deleteBtn.appendChild(document.createTextNode('Delete Todo'));
+      deleteBtn.setAttribute('data-todo-index', index);
+      deleteBtn.setAttribute('data-project-name', project.name);
 
       buttonDiv.appendChild(deleteBtn);
 

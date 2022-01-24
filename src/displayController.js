@@ -1,5 +1,6 @@
 import PubSub from "pubsub-js";
 import createTodo from "./createTodo";
+import { parse } from "date-fns";
 
 const displayController = () => {
   // Helper function to clear current page view and allow for new view to be appended to content div
@@ -101,6 +102,7 @@ const displayController = () => {
     const newTodoRadioBtn = document.querySelector('#todo-complete-yes');
     const projectHeader = document.querySelector('.project-header');
     const todoFormContainer = document.querySelector('.new-todo-form-container');
+    const todoFormDiv = document.querySelector('.todo-form-div');
 
     const getFormInput = () => {
       const name = todoForm['todo-name'].value;
@@ -117,9 +119,13 @@ const displayController = () => {
 
       const newTodo = createTodo(name, description, dueDate, priority, complete, project);
 
+      console.log(newTodo);
+
       if(todoForm.hasAttribute('data-todo-index')){
         let newTodoInfo = {};
         newTodoInfo.index = todoForm.getAttribute('data-todo-index');
+        // newTodo.dueDate = parse(newTodo.dueDate, 'MMMM do yyyy', new Date());
+        console.log(newTodo.dueDate);
         newTodoInfo.todo = newTodo;
         PubSub.publish('edit todo submitted', newTodoInfo);
       }else {
@@ -127,12 +133,23 @@ const displayController = () => {
       }
       
     }
-
+    // Submit todo form info on submit button click
     todoFormBtn.addEventListener('click', function() {
       getFormInput()
       document.body.removeChild(todoFormContainer);
-    }
-    );
+    });
+    document.addEventListener('keyup', function(e){
+      if(e.code === 'Enter'){
+        getFormInput()
+        document.body.removeChild(todoFormContainer);
+      }
+    })
+    todoFormContainer.addEventListener('click', function(){
+      document.body.removeChild(todoFormContainer);
+    });
+    todoFormDiv.addEventListener('click', function(e){
+      e.stopPropagation();
+    })
   }
 
   // Delete this when done
